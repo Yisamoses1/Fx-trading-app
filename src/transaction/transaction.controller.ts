@@ -15,7 +15,11 @@ export class TransactionController {
   ) {
     const pageNum = parseInt(page, 10) || 1
     const limitNum = parseInt(limit, 10) || 20
-    return this.transactionService.getTransactions(req.user.wallet_id, pageNum, limitNum)
+    return this.transactionService.getTransactions(
+      req.user.wallet_id,
+      pageNum,
+      limitNum,
+    )
   }
 
   @Get('/:id')

@@ -18,7 +18,7 @@ export class Wallet {
   @Column({ type: 'decimal', precision: 18, scale: 2, default: 0 })
   balance: number
 
-  @Column({ type: 'varchar', length: 10,})
+  @Column({ type: 'varchar', length: 10 })
   currency: Currency
 
   @ManyToOne(() => User, (user) => user.wallets, { onDelete: 'CASCADE' })

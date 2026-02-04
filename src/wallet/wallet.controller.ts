@@ -4,9 +4,7 @@ import {
   Post,
   Body,
   Req,
-  BadRequestException,
   UseGuards,
-  Query,
   Param,
 } from '@nestjs/common'
 import { WalletService } from './wallet.service'
@@ -37,10 +35,7 @@ export class WalletController {
   }
 
   @Post('convert')
-  async convertCurrency(
-    @Req() req,
-    @Body() payload: ConvertDto,
-  ) {
+  async convertCurrency(@Req() req, @Body() payload: ConvertDto) {
     const userId = req.user.userId
     const { from, to, amount } = payload
 

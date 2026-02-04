@@ -66,7 +66,9 @@ export class WalletService {
     }
 
     if (wallet.currency !== payload.currency) {
-      throw new BadRequestException(`Wallet currency ${wallet.currency} does not match requested currency ${payload.currency}`)
+      throw new BadRequestException(
+        `Wallet currency ${wallet.currency} does not match requested currency ${payload.currency}`,
+      )
     }
 
     const balanceBefore = parseFloat(wallet.balance.toString()) || 0

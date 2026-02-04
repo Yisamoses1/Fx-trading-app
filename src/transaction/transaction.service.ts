@@ -32,14 +32,20 @@ export class TransactionService {
     return this.transactionRepository.findOne({ where: { id } })
   }
 
-  async getTransactions(walletId: string, page: number = 1, limit: number = 20) {
+  async getTransactions(
+    walletId: string,
+    page: number = 1,
+    limit: number = 20,
+  ) {
     const skip = (page - 1) * limit
-    const [transactions, total] = await this.transactionRepository.findAndCount({
-      where: { wallet: { id: walletId } },
-      order: { createdAt: 'DESC' },
-      skip,
-      take: limit,
-    })
+    const [transactions, total] = await this.transactionRepository.findAndCount(
+      {
+        where: { wallet: { id: walletId } },
+        order: { createdAt: 'DESC' },
+        skip,
+        take: limit,
+      },
+    )
 
     return {
       transactions,

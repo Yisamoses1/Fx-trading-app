@@ -1,4 +1,11 @@
-import { IsNumber, IsString, IsIn, IsNotEmpty, IsUUID, IsPositive } from 'class-validator'
+import {
+  IsNumber,
+  IsString,
+  IsIn,
+  IsNotEmpty,
+  IsUUID,
+  IsPositive,
+} from 'class-validator'
 import { Transform } from 'class-transformer'
 
 export class FundWalletDto {

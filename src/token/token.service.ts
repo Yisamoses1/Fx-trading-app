@@ -22,10 +22,7 @@ export class TokenService {
 
   async generateToken(userId: string, expiresIn: number, tokenType: TokenType) {
     const secret = this.configService.get<string>('JWT_SECRET')
-    return this.jwtService.sign(
-      { userId, tokenType },
-      { secret, expiresIn },
-    )
+    return this.jwtService.sign({ userId, tokenType }, { secret, expiresIn })
   }
 
   async deleteToken(userId: string, tokenType: TokenType) {
@@ -63,10 +60,7 @@ export class TokenService {
     return { accessToken, refreshToken }
   }
 
-  async findAndVerifyToken(
-    token: string,
-    tokenType: TokenType,
-  ) {
+  async findAndVerifyToken(token: string, tokenType: TokenType) {
     const storedToken = await this.tokenRepository.findOne({
       where: { token, tokenType },
       relations: ['user'],
