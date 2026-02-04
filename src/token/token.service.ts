@@ -6,6 +6,11 @@ import { Repository } from 'typeorm'
 import { Token, TokenType } from './entities/token.entity'
 import { User } from 'src/user/entities/user.entity'
 
+export interface JwtPayload {
+  userId: string
+  tokenType: TokenType
+}
+
 @Injectable()
 export class TokenService {
   constructor(
@@ -15,11 +20,11 @@ export class TokenService {
     private readonly configService: ConfigService,
   ) {}
 
-  async generateToken(userId: string, expiresIn: string, tokenType: TokenType) {
+  async generateToken(userId: string, expiresIn: number, tokenType: TokenType) {
     const secret = this.configService.get<string>('JWT_SECRET')
     return this.jwtService.sign(
       { userId, tokenType },
-      { secret, expiresIn: expiresIn as any },
+      { secret, expiresIn },
     )
   }
 
@@ -35,12 +40,12 @@ export class TokenService {
   async createAccessRefreshToken(user: User) {
     const accessToken = await this.generateToken(
       user.id,
-      '15m',
+      15 * 60, // 15 minutes in seconds
       TokenType.ACCESS,
     )
     const refreshToken = await this.generateToken(
       user.id,
-      '30d',
+      30 * 24 * 60 * 60, // 30 days in seconds
       TokenType.REFRESH,
     )
 
@@ -61,7 +66,7 @@ export class TokenService {
   async findAndVerifyToken(
     token: string,
     tokenType: TokenType,
-  ): Promise<any | null> {
+  ) {
     const storedToken = await this.tokenRepository.findOne({
       where: { token, tokenType },
       relations: ['user'],
@@ -70,7 +75,7 @@ export class TokenService {
 
     const secret = this.configService.get<string>('JWT_SECRET')
     try {
-      return this.jwtService.verify(token, { secret })
+      return this.jwtService.verify(token, { secret }) as JwtPayload
     } catch {
       return null
     }

@@ -6,7 +6,7 @@ import {
   UseGuards,
   Req,
 } from '@nestjs/common'
-import { TokenService } from './token.service'
+import { TokenService, JwtPayload } from './token.service'
 import { TokenType } from './entities/token.entity'
 import { User } from 'src/user/entities/user.entity'
 import { AuthGuard } from 'src/guard/auth-guard'
@@ -24,9 +24,8 @@ export class TokenController {
     if (!payload) {
       throw new UnauthorizedException('Invalid or expired refresh token')
     }
-    const user = payload
     return this.tokenService.createAccessRefreshToken({
-      id: user.userId,
+      id: payload.userId,
     } as User)
   }
   @Post('logout')
