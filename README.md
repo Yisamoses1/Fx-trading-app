@@ -64,18 +64,6 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-##  System Design & Architecture
-
-### High-Level Overview
-This system follows a **Modular Monolith** pattern, ensuring high cohesion and low coupling between domains. By leveraging **TypeORM** for PostgreSQL and **BullMQ** for asynchronous job processing, the system is designed to handle financial operations with high reliability.
-
-### Key Architectural Decisions
-* **Double-Entry Ledger:** Every wallet operation creates a corresponding transaction record, ensuring the system balance always reconciles.
-* **Asynchronous Processing:** Critical but non-blocking tasks (like sending OTPs via email) are offloaded to **BullMQ** workers. This prevents external API latency from affecting user response times.
-* **Polymorphic Audit Logging:** The `AuditLog` module uses a `targetModel` and `targetId` pattern, allowing us to audit any entity in the system (Wallets, Transactions, or Users) within a single unified table.
-* **Security:** Passwords are never stored in plain text (Bcrypt/Argon2) and sensitive routes are protected by a JWT-based `AuthGuard` with Refresh Token rotation.
-
-
 ## Project Structure
 src/user → User entity, service, controllers (signup, login, verify email)
 
@@ -139,6 +127,16 @@ GET /audit-logs/wallet/:id → Get audit logs for a wallet
 GET /audit-logs/:id → Get a single audit log
 
 ## System Design
+
+### High-Level Overview
+This system follows a **Modular Monolith** pattern, ensuring high cohesion and low coupling between domains. By leveraging **TypeORM** for PostgreSQL and **BullMQ** for asynchronous job processing, the system is designed to handle financial operations with high reliability.
+
+### Key Architectural Decisions
+* **Double-Entry Ledger:** Every wallet operation creates a corresponding transaction record, ensuring the system balance always reconciles.
+* **Asynchronous Processing:** Critical but non-blocking tasks (like sending OTPs via email) are offloaded to **BullMQ** workers. This prevents external API latency from affecting user response times.
+* **Polymorphic Audit Logging:** The `AuditLog` module uses a `targetModel` and `targetId` pattern, allowing us to audit any entity in the system (Wallets, Transactions, or Users) within a single unified table.
+* **Security:** Passwords are never stored in plain text (Bcrypt/Argon2) and sensitive routes are protected by a JWT-based `AuthGuard` with Refresh Token rotation.
+
 
 ### Architecture Overview
 The system is built using **NestJS** with a modular architecture. Each domain (User, Token, Wallet, Transaction, FX, AuditLog) is encapsulated in its own module, exposing controllers, services, and entities.
