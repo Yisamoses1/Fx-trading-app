@@ -263,6 +263,14 @@ Developer: Rasaq
 
 Framework: NestJS
 
+Database: PostgreSQL / Type ORM
+
+Messaging: Bullmq
+
+Testing: Jest
+
+Validation: Class-validator & DTOs
+
 License: MIT
 
 ## Stay in touch
