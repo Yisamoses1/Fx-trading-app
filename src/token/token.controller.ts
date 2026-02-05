@@ -3,7 +3,6 @@ import {
   Post,
   Body,
   UnauthorizedException,
-  UseGuards,
   Req,
 } from '@nestjs/common'
 import { TokenService } from './token.service'
