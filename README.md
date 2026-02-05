@@ -232,6 +232,9 @@ The system is built using **NestJS** with a modular architecture. Each domain (U
 6. AuditLogService records the action with details.  
 7. Response returned with updated balance and reference.
 
+### Documentation on postman 
+ [https://.postman.co/workspace/My-Workspace~ce342de9-293d-4f1e-8b08-d1eaa008bdc8/collection/32752842-d12e7fc6-b0fa-4076-a063-44d706ad7590?action=share&creator=32752842]
+
 ### Deployment Considerations
 
 - **Database**: PostgreSQL recommended (supports JSONB for audit details).  
