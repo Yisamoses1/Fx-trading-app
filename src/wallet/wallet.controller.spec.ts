@@ -1,10 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import { WalletController } from './wallet.controller'
 import { WalletService } from './wallet.service'
-import { BadRequestException } from '@nestjs/common'
+import { BadRequestException, ValidationPipe } from '@nestjs/common'
 import { Currency } from './dto/currency.enum'
-import { AuthGuard } from 'src/guard/auth-guard'
+import { AuthGuard } from 'src/common/guards/auth-guard'
 import { Wallet } from './entities/wallet.entity'
+import { ConvertDto } from './dto/convert-wallet.dto'
 
 describe('WalletController', () => {
   let controller: WalletController
@@ -88,7 +89,7 @@ describe('WalletController', () => {
 
   describe('convertCurrency', () => {
     it('should call service.convertCurrency when params are valid', async () => {
-      const body = { from: Currency.USD, to: Currency.EUR, amount: 50 }
+      const payload = { from: Currency.USD, to: Currency.EUR, amount: 50 }
       const expected = {
         message: 'Converted',
         rateUsed: 1.2,
@@ -97,7 +98,7 @@ describe('WalletController', () => {
       }
       service.convertCurrency.mockResolvedValue(expected)
 
-      const result = await controller.convertCurrency(mockRequest, body)
+      const result = await controller.convertCurrency(mockRequest, payload)
 
       expect(service.convertCurrency).toHaveBeenCalledWith(
         'user-12',
@@ -109,17 +110,20 @@ describe('WalletController', () => {
     })
 
     it('should throw BadRequestException if params are missing', async () => {
-      const badBody = { from: Currency.USD } as any
-
+      const pipe = new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+      })
+      const wrongBody = { from: Currency.USD }
       await expect(
-        controller.convertCurrency(mockRequest, badBody),
+        pipe.transform(wrongBody, { type: 'body', metatype: ConvertDto }),
       ).rejects.toThrow(BadRequestException)
     })
   })
 
   describe('tradeCurrency', () => {
     it('should call service.tradeCurrency with payload', async () => {
-      const dto = { from: Currency.USD, to: Currency.GBP, amount: 20 }
+      const payload = { from: Currency.USD, to: Currency.GBP, amount: 20 }
       const expected = {
         message: 'Traded',
         rateUsed: 1.3,
@@ -128,9 +132,9 @@ describe('WalletController', () => {
       }
       service.tradeCurrency.mockResolvedValue(expected)
 
-      const result = await controller.tradeCurrency(mockRequest, dto)
+      const result = await controller.tradeCurrency(mockRequest, payload)
 
-      expect(service.tradeCurrency).toHaveBeenCalledWith('user-123', dto)
+      expect(service.tradeCurrency).toHaveBeenCalledWith('user-12', payload)
       expect(result).toEqual(expected)
     })
   })

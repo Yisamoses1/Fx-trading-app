@@ -1,9 +1,7 @@
 import { Controller, Get, Param, Post, Body, UseGuards } from '@nestjs/common'
 import { AuditLogService } from './audit-logs.service'
 import { CreateAuditLogDto } from './dto/create-audit-log.dto'
-import { AuthGuard } from 'src/guard/auth-guard'
 
-@UseGuards(AuthGuard)
 @Controller('audit-logs')
 export class AuditLogController {
   constructor(private readonly auditLogService: AuditLogService) {}

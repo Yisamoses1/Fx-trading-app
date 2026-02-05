@@ -17,6 +17,8 @@ import { Password } from './password/entities/password.entity'
 import { JwtModule } from '@nestjs/jwt'
 import { AuditLogModule } from './audit-logs/audit-logs.module'
 import { AuditLog } from './audit-logs/entities/audit-log.entity'
+import { APP_GUARD } from '@nestjs/core'
+import { AuthGuard } from './common/guards/auth-guard'
 
 @Module({
   imports: [
@@ -67,6 +69,13 @@ import { AuditLog } from './audit-logs/entities/audit-log.entity'
     OtpModule,
     PasswordModule,
     AuditLogModule,
+  ],
+
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
   ],
 })
 export class AppModule {}

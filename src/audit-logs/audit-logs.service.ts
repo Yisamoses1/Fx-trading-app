@@ -21,12 +21,10 @@ export class AuditLogService {
 
   async record(dto: CreateAuditLogDto) {
     try {
-      console.log('Adding audit log to queue:', dto)
       await this.auditQueue.add('record', dto, {
         attempts: 3,
         backoff: { type: 'exponential', delay: 5000 },
       })
-      console.log('Audit log job queued successfully')
       return { message: 'Audit log job queued successfully' }
     } catch (error) {
       console.error('Error queuing audit log:', error)

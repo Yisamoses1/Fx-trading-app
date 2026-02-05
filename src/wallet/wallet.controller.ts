@@ -11,7 +11,7 @@ import { WalletService } from './wallet.service'
 import { FundWalletDto } from './dto/fund-wallet.dto'
 import { TradeDto } from './dto/trade-wallet.dto'
 import { ConvertDto } from './dto/convert-wallet.dto'
-import { AuthGuard } from 'src/guard/auth-guard'
+import { AuthGuard } from 'src/common/guards/auth-guard'
 
 @UseGuards(AuthGuard)
 @Controller('wallets')

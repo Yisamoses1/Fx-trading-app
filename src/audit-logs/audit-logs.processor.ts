@@ -25,7 +25,6 @@ export class AuditLogProcessor {
 
     try {
       await this.auditLogRepository.save(auditLog)
-      console.log('Audit log saved successfully', auditLog)
     } catch (error) {
       console.error('Error saving audit log', error)
       throw error
