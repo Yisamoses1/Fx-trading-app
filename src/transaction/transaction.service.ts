@@ -67,4 +67,12 @@ export class TransactionService {
     }
     return transaction
   }
+
+  async findByReference(reference?: string): Promise<Transaction | null> {
+  if (!reference) return null
+  
+  return await this.transactionRepository.findOne({
+    where: { reference },
+  })
+}
 }

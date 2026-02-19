@@ -65,6 +65,16 @@ export class WalletService {
       throw new BadRequestException('Wallet not found')
     }
 
+    const existingTx = await this.transactionService.findByReference(payload.reference)
+    if (existingTx) {
+      return {
+        message: 'Transaction already processed',
+        balance: wallet.balance,
+        reference: existingTx.reference,
+        status: existingTx.status
+      }
+    }
+
     if (wallet.currency !== payload.currency) {
       throw new BadRequestException(
         `Wallet currency ${wallet.currency} does not match requested currency ${payload.currency}`,
